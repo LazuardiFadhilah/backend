@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
 import express from "express";
 import apiRouter from "./routes/api.js";
 import connection from "./connection.js";
+
+const env = dotenv.config().parsed;
+
 const app = express();
 
 app.use(express.json());
@@ -16,6 +20,6 @@ app.use((req, res) => {
 // MongoDB Connection
 connection();
 
-app.listen(3000, () => {
-  console.log("server started on port 3000");
+app.listen(env.APP_PORT, () => {
+  console.log(`server started on port ${env.APP_PORT}`);
 });
