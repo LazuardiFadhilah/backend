@@ -18,6 +18,7 @@ const Schema = new mongoose.Schema(
       type: String,
       enum: ["active", "inactive"],
       default: "active",
+      required: true,
     },
     createdAt: {
       type: Number,
@@ -33,3 +34,5 @@ const Schema = new mongoose.Schema(
     },
   }
 );
+
+export default mongoose.model("User", Schema);
