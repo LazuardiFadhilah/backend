@@ -3,6 +3,18 @@ import emailExist from "../libraries/emailExist.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const generateAccessToken = (payload) => {
+  return jwt.sign(payload, "123123u123i1o23o", {
+    expiresIn: "15m",
+  });
+};
+
+const generateRefreshToken = (payload) => {
+  return jwt.sign(payload, "123kjaskdjasdlkaj12", {
+    expiresIn: "1h",
+  });
+};
+
 class AuthController {
   async register(req, res) {
     try {
@@ -86,17 +98,8 @@ class AuthController {
         };
       }
 
-      const accessToken = await jwt.sign({ id: user._id }, "123123u123i1o23o", {
-        expiresIn: "15m",
-      });
-
-      const refreshToken = await jwt.sign(
-        { id: user._id },
-        "123kjaskdjasdlkaj12",
-        {
-          expiresIn: "1h",
-        }
-      );
+      const accessToken = generateAccessToken({ id: user._id });
+      const refreshToken = generateRefreshToken({ id: user._id });
 
       return res.status(200).json({
         status: true,
