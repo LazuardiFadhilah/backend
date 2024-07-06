@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import emailExist from "../libraries/emailExist.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class AuthController {
   async register(req, res) {
@@ -85,10 +86,24 @@ class AuthController {
         };
       }
 
+      const accessToken = await jwt.sign({ id: user._id }, "123123u123i1o23o", {
+        expiresIn: "15m",
+      });
+
+      const refreshToken = await jwt.sign(
+        { id: user._id },
+        "123kjaskdjasdlkaj12",
+        {
+          expiresIn: "1h",
+        }
+      );
+
       return res.status(200).json({
         status: true,
         message: "USER_LOGIN_SUCCESS",
         fullname: user.fullname,
+        accessToken,
+        refreshToken,
       });
     } catch (error) {
       return res.status(error.code || 500).json({
