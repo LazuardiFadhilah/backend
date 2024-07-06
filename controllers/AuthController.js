@@ -56,6 +56,47 @@ class AuthController {
       });
     }
   }
+
+  async login(req, res) {
+    try {
+      if (!req.body.email) {
+        throw { code: 400, message: "EMAIL_IS_REQUIRED" };
+      }
+      if (!req.body.password) {
+        throw { code: 400, message: "PASSWORD_IS_REQUIRED" };
+      }
+
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        throw {
+          code: 404,
+          message: "USER_NOT_FOUND",
+        };
+      }
+
+      const isPasswordMatch = await bcrypt.compareSync(
+        req.body.password,
+        user.password
+      );
+      if (!isPasswordMatch) {
+        throw {
+          code: 400,
+          message: "PASSWORD_NOT_MATCH",
+        };
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "USER_LOGIN_SUCCESS",
+        fullname: user.fullname,
+      });
+    } catch (error) {
+      return res.status(error.code || 500).json({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default new AuthController();
