@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import emailExist from "../libraries/emailExist.js";
+import bcrypt from "bcrypt";
 
 class AuthController {
   async register(req, res) {
@@ -13,6 +14,12 @@ class AuthController {
       if (!req.body.password) {
         throw { code: 400, message: "PASSWORD_IS_REQUIRED" };
       }
+      if (req.body.password.lenght < 6) {
+        throw {
+          code: 400,
+          message: "PASSWORD_MINIMUM_6_CHARACTERS",
+        };
+      }
 
       const isEmailExist = await emailExist(req.body.email);
       if (isEmailExist) {
@@ -22,7 +29,14 @@ class AuthController {
         };
       }
 
-      const user = await User.create(req.body);
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(req.body.password, salt);
+
+      const user = await User.create({
+        fullname: req.body.fullname,
+        email: req.body.email,
+        password: hash,
+      });
       if (!user) {
         throw {
           code: 500,
