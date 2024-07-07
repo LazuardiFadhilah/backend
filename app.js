@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", apiRouter);
+app.use("/", apiRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "404_NOT_FOUND" });
