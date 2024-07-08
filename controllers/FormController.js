@@ -4,9 +4,15 @@ import Form from "../models/form.js";
 class FormController {
   async index(req, res) {
     try {
-      const form = await Form.find({
-        userId: req.jwt.id,
-      });
+      const limit = parseInt(req.body.limit) || 10;
+      const page = parseInt(req.body.page) || 1;
+
+      const form = await Form.paginate(
+        {
+          userId: req.jwt.id,
+        },
+        { limit: limit, page: page }
+      );
 
       if (!form) {
         throw { code: 404, message: "FORMS_NOT_FOUND" };
@@ -14,7 +20,6 @@ class FormController {
       return res.status(200).json({
         status: true,
         message: "FORMS_FOUND",
-        total: form.length,
         form,
       });
     } catch (error) {
