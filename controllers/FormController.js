@@ -25,6 +25,36 @@ class FormController {
       });
     }
   }
+
+  //   create function show form controller
+  async show(req, res) {
+    try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        throw {
+          code: 400,
+          message: "ID_INVALID",
+        };
+      }
+      const form = await Form.findOne({
+        _id: req.params.id,
+        userId: req.jwt.id,
+      });
+
+      if (!form) {
+        throw { code: 404, message: "FORM_NOT_FOUND" };
+      }
+      return res.status(200).json({
+        status: true,
+        message: "FORM_FOUND",
+        form,
+      });
+    } catch (error) {
+      return res.status(error.code || 500).json({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default new FormController();
