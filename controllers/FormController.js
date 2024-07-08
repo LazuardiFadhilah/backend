@@ -96,6 +96,45 @@ class FormController {
       });
     }
   }
+
+  async destroy(req, res) {
+    try {
+      if (!req.params.id) {
+        throw {
+          code: 400,
+          message: "REQUIRED_FORM_ID",
+        };
+      }
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        throw {
+          code: 400,
+          message: "ID_INVALID",
+        };
+      }
+
+      const form = await Form.findOneAndDelete({
+        _id: req.params.id,
+        userId: req.jwt.id,
+      });
+
+      if (!form) {
+        throw {
+          code: 404,
+          message: "FORM_DELETE_FAILED",
+        };
+      }
+      return res.status(200).json({
+        status: true,
+        message: "SUCCESS_DELETE_FORM",
+        form,
+      });
+    } catch (error) {
+      return res.status(error.code || 500).json({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default new FormController();
