@@ -4,6 +4,39 @@ import Form from "../models/form.js";
 const allowedType = ["Text", "Radio", "Checkbox", "Dropdown", "Email"];
 
 class QuestionController {
+  //   List Question
+  async index(req, res) {
+    try {
+      if (!req.params.id) {
+        throw { code: 400, message: "REQUIRED_FORM_ID" };
+      }
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        throw { code: 400, message: "INVALID_ID" };
+      }
+
+      const form = await Form.findOne({
+        _id: req.params.id,
+        userId: req.jwt.id,
+      });
+
+      if (!form) {
+        throw { code: 404, message: "FORM_NOT_FOUND" };
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "SUCCESS_GET_QUESTIONS",
+        form,
+      });
+    } catch (error) {
+      return res.status(error.code || 500).json({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
+
+  //   Store Question
   async store(req, res) {
     try {
       if (!req.params.id) {
