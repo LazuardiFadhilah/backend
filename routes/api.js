@@ -26,5 +26,10 @@ router.put(
   jwtAuth(),
   QuestionController.update
 );
-// router.delete("/forms/:id", jwtAuth(), FormController.destroy);
+router.delete(
+  "/forms/:id/question/:questionId",
+  jwtAuth(),
+  QuestionController.destroy
+);
+
 export default router;
