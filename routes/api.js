@@ -3,6 +3,7 @@ import jwtAuth from "../middlewares/jwtAuth.js";
 import AuthController from "../controllers/AuthController.js";
 import FormController from "../controllers/FormController.js";
 import QuestionController from "../controllers/QuestionController.js";
+import OptionController from "../controllers/OptionController.js";
 const router = express.Router();
 
 // auth
@@ -31,4 +32,10 @@ router.delete(
   QuestionController.destroy
 );
 
+// Options
+router.post(
+  "/forms/:id/questions/:questionId/options",
+  jwtAuth(),
+  OptionController.store
+);
 export default router;
