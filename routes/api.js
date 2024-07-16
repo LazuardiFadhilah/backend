@@ -38,4 +38,11 @@ router.post(
   jwtAuth(),
   OptionController.store
 );
+router.put(
+  "/forms/:id/questions/:questionId/options/:optionId",
+  jwtAuth(),
+  OptionController.update
+);
 export default router;
+
+

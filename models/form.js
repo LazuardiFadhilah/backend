@@ -14,7 +14,34 @@ const Schema = new mongoose.Schema(
       type: String,
     },
     question: {
-      type: Array,
+      type: [
+        {
+          id: {
+            type: mongoose.Schema.ObjectId,
+          },
+          question: {
+            type: String,
+            default: null,
+          },
+          type: {
+            type: String,
+          },
+          required: {
+            type: Boolean,
+            default: false,
+          },
+          options: [
+            {
+              id: {
+                type: mongoose.Schema.ObjectId,
+              },
+              value: {
+                type: String,
+              },
+            },
+          ],
+        },
+      ],
     },
     invites: {
       type: Array,
