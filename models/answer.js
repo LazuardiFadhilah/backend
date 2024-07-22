@@ -27,6 +27,4 @@ const Schema = new mongoose.Schema(
   }
 );
 
-Schema.plugin(mongoosePaginate);
-
 export default mongoose.model("Answer", Schema);
