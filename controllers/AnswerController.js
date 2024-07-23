@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Answer from "../models/answer.js";
 import AnswerDuplicate from "../libraries/answerDuplicate.js";
+import Form from "../models/form.js";
+import questionRequiredButEmpty from "../libraries/questionRequiredButEmpty.js";
 
 class AnswerController {
   async store(req, res) {
@@ -11,10 +13,18 @@ class AnswerController {
       if (!mongoose.Types.ObjectId.isValid(req.params.formId)) {
         throw { code: 400, message: "FORM_ID_INVALID" };
       }
-
+      const form = await Form.findById(req.params.formId);
       const isDuplicate = await AnswerDuplicate(req.body.answers);
       if (isDuplicate) {
         throw { code: 400, message: "DUPLICATE_ANSWER" };
+      }
+
+      const questionRequiredEmpty = await questionRequiredButEmpty(
+        form,
+        req.body.answers
+      );
+      if (questionRequiredEmpty) {
+        throw { code: 400, message: "QUESTION_REQUIRED_BUT_EMPTY" };
       }
 
       let fields = {};

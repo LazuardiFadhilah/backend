@@ -6,7 +6,6 @@ const AnswerDuplicate = async (answers) => {
     }
     seen.add(answer.questionId);
   });
-  console.log(d);
   return d;
 };
 export default AnswerDuplicate;
