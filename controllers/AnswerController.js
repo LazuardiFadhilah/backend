@@ -3,6 +3,7 @@ import Answer from "../models/answer.js";
 import AnswerDuplicate from "../libraries/answerDuplicate.js";
 import Form from "../models/form.js";
 import questionRequiredButEmpty from "../libraries/questionRequiredButEmpty.js";
+import optionValueNotExist from "../libraries/optionValueNotExist.js";
 
 class AnswerController {
   async store(req, res) {
@@ -23,8 +24,9 @@ class AnswerController {
         form,
         req.body.answers
       );
-      if (questionRequiredEmpty) {
-        throw { code: 400, message: "QUESTION_REQUIRED_BUT_EMPTY" };
+      const optionNotExist = await optionValueNotExist(form, req.body.answers);
+      if (optionNotExist) {
+        throw { code: 400, message: "OPTION_VALUE_IS_NOT_EXIST" };
       }
 
       let fields = {};
