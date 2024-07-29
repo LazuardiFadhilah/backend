@@ -4,6 +4,7 @@ import AnswerDuplicate from "../libraries/answerDuplicate.js";
 import Form from "../models/form.js";
 import questionRequiredButEmpty from "../libraries/questionRequiredButEmpty.js";
 import optionValueNotExist from "../libraries/optionValueNotExist.js";
+import questionIdNotValid from "../libraries/questionIdNotValid.js";
 
 class AnswerController {
   async store(req, res) {
@@ -28,8 +29,24 @@ class AnswerController {
         throw { code: 400, message: "QUESTION_REQUIRED_BUT_EMPTY" };
       }
       const optionNotExist = await optionValueNotExist(form, req.body.answers);
-      if (optionNotExist) {
-        throw { code: 400, message: "OPTION_VALUE_IS_NOT_EXIST" };
+      if (optionNotExist.lenght > 0) {
+        throw {
+          code: 400,
+          message: "OPTION_VALUE_IS_NOT_EXIST",
+          question: optionNotExist[0].questions,
+        };
+      }
+
+      const questionIdInValid = await questionIdNotValid(
+        form,
+        req.body.answers
+      );
+      if (questionIdInValid.length > 0) {
+        throw {
+          code: 400,
+          message: "QUESTION_IS_NOT_EXIST",
+          question: questionIdInValid[0].questionId,
+        };
       }
 
       let fields = {};
