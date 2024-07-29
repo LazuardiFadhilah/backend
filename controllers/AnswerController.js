@@ -24,6 +24,9 @@ class AnswerController {
         form,
         req.body.answers
       );
+      if (questionRequiredEmpty) {
+        throw { code: 400, message: "QUESTION_REQUIRED_BUT_EMPTY" };
+      }
       const optionNotExist = await optionValueNotExist(form, req.body.answers);
       if (optionNotExist) {
         throw { code: 400, message: "OPTION_VALUE_IS_NOT_EXIST" };

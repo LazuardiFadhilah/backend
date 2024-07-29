@@ -12,9 +12,20 @@ const optionValueNotExist = async (form, answers) => {
           return true;
         }
       }
+    } else if (qst.type == "Checkbox") {
+      const answer = answers.find((answer) => answer.questionId == qst.id);
+
+      if (answer) {
+        return answer.value.some((value) => {
+          const option = qst.options.find((option) => option.value == value);
+          if (option == undefined) {
+            return true;
+          }
+        });
+      }
     }
   });
-  return found.length > 0 ? true : false;
+  return found.length > 0 ? found[0].question : false;
 };
 
 export default optionValueNotExist;
