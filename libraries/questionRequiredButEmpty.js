@@ -5,6 +5,7 @@ const questionRequiredButEmpty = async (form, answers) => {
       if (
         answer == undefined ||
         answer.value == undefined ||
+        answer.value == null ||
         answer.value == ""
       ) {
         return true;

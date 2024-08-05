@@ -5,6 +5,7 @@ import Form from "../models/form.js";
 import questionRequiredButEmpty from "../libraries/questionRequiredButEmpty.js";
 import optionValueNotExist from "../libraries/optionValueNotExist.js";
 import questionIdNotValid from "../libraries/questionIdNotValid.js";
+import emailNotValid from "../libraries/emailNotValid.js";
 
 class AnswerController {
   async store(req, res) {
@@ -46,6 +47,15 @@ class AnswerController {
           code: 400,
           message: "QUESTION_IS_NOT_EXIST",
           question: questionIdInValid[0].questionId,
+        };
+      }
+
+      const emailIsNotValid = await emailNotValid(form, req.body.answers);
+      if (emailIsNotValid.length > 0) {
+        throw {
+          code: 400,
+          message: "EMAIL_IS_NOT_VALID",
+          questions: emailIsNotValid[0].question,
         };
       }
 
