@@ -3,6 +3,45 @@ import Form from "../models/form.js";
 import User from "../models/user.js";
 
 class InviteController {
+  async index(req, res) {
+    try {
+      if (!req.params.id) {
+        throw {
+          code: 400,
+          message: "REQUIRED_FORM_ID",
+        };
+      }
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        throw {
+          code: 400,
+          message: "INVALID_ID",
+        };
+      }
+
+      //   check is email exist
+      const form = await Form.findOne({
+        _id: req.params.id,
+        userId: req.jwt.id,
+      }).select("invites");
+      if (!form) {
+        throw {
+          code: 404,
+          message: "INVITES_NOT_FOUND",
+        };
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "INVITES_FOUND",
+        invites: form.invites,
+      });
+    } catch (error) {
+      return res.status(error.code || 500).json({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
   async store(req, res) {
     try {
       if (!req.params.id) {

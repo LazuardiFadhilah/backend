@@ -53,6 +53,7 @@ router.delete(
 );
 
 // Invites
+router.get("/forms/:id/invites", jwtAuth(), inviteController.index);
 router.post("/forms/:id/invites", jwtAuth(), inviteController.store);
 router.delete("/forms/:id/invites", jwtAuth(), inviteController.destroy);
 
