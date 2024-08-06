@@ -54,6 +54,7 @@ router.delete(
 
 // Invites
 router.post("/forms/:id/invites", jwtAuth(), inviteController.store);
+router.delete("/forms/:id/invites", jwtAuth(), inviteController.destroy);
 
 // Answer
 router.post("/answers/:formId", jwtAuth(), AnswerController.store);
