@@ -62,5 +62,5 @@ router.delete("/forms/:id/invites", jwtAuth(), inviteController.destroy);
 router.post("/answers/:formId", jwtAuth(), AnswerController.store);
 
 // Response
-router.get("responses/:formId/lists", jwtAuth(), ResponseController.lists);
+router.get("/responses/:formId/lists", jwtAuth(), ResponseController.lists);
 export default router;
