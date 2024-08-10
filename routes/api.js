@@ -6,6 +6,7 @@ import QuestionController from "../controllers/QuestionController.js";
 import OptionController from "../controllers/OptionController.js";
 import AnswerController from "../controllers/AnswerController.js";
 import inviteController from "../controllers/inviteController.js";
+import ResponseController from "../controllers/ResponseController.js";
 const router = express.Router();
 
 // auth
@@ -59,4 +60,7 @@ router.delete("/forms/:id/invites", jwtAuth(), inviteController.destroy);
 
 // Answer
 router.post("/answers/:formId", jwtAuth(), AnswerController.store);
+
+// Response
+router.get("responses/:formId/lists", jwtAuth(), ResponseController.lists);
 export default router;
