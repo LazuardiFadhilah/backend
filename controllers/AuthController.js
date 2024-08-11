@@ -64,10 +64,17 @@ class AuthController {
         };
       }
 
+      // Generate Token
+      let payload = { id: user._id };
+      const accessToken = await generateAccessToken(payload);
+      const refreshToken = await generateRefreshToken(payload);
+
       return res.status(200).json({
         status: true,
         message: "USER_REGISTER_SUCCESS",
-        user,
+        fullname: user.fullname,
+        accessToken,
+        refreshToken,
       });
     } catch (error) {
       return res.status(error.code || 500).json({
