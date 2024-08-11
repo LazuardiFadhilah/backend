@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Form from "../models/form.js";
 import User from "../models/user.js";
+import isEmailValid from "../libraries/isEmailValid.js";
 
 class InviteController {
   async index(req, res) {
@@ -85,7 +86,7 @@ class InviteController {
       }
 
       //   check Email
-      if (/[a-z0-9]+@[a-z}+.[a-z]{2,3}/.test(req.body.email) === false) {
+      if (!isEmailValid(req.body.email)) {
         throw {
           code: 400,
           message: "INVALID_EMAIL",

@@ -3,6 +3,7 @@ import emailExist from "../libraries/emailExist.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import isEmailValid from "../libraries/isEmailValid.js";
 
 const env = dotenv.config().parsed;
 
@@ -26,6 +27,9 @@ class AuthController {
       }
       if (!req.body.email) {
         throw { code: 400, message: "EMAIL_IS_REQUIRED" };
+      }
+      if (!isEmailValid(req.body.email)) {
+        throw { code: 400, message: "INVALID_EMAIL" };
       }
       if (!req.body.password) {
         throw { code: 400, message: "PASSWORD_IS_REQUIRED" };

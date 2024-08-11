@@ -5,7 +5,7 @@ const questionIdNotValid = async (form, answers) => {
       return true;
     }
   });
-  console.log(found);
+
   return found.length > 0 ? found : false;
   //   return true;
 };

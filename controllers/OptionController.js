@@ -83,9 +83,6 @@ class OptionController {
         throw { code: 400, message: "REQUIRED_OPTION" };
       }
 
-      console.log("Option Id", req.params.optionId);
-      console.log("Question Id", req.params.questionId);
-
       const form = await Form.findOneAndUpdate(
         {
           _id: req.params.id,
@@ -113,7 +110,7 @@ class OptionController {
           new: true,
         }
       );
-      console.log(form);
+
       if (!form) {
         throw { code: 400, message: "UPDATE_OPTION_FAILED" };
       }
