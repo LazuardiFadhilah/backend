@@ -108,7 +108,7 @@ class AuthController {
       if (!isPasswordMatch) {
         throw {
           code: 400,
-          message: "PASSWORD_NOT_MATCH",
+          message: "INVALID_PASSWORD",
         };
       }
 
